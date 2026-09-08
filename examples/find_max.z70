@@ -1,0 +1,76 @@
+.text
+    mov a, [arr_start]
+    mov i, a
+    mov a, [arr_len]
+    cmp a, 0
+    jz search_done
+    mov [remaining], a
+    mov a, [i]
+    mov [max_val], a
+    mov a, 0
+    mov [max_idx], a
+    mov a, [remaining]
+    dec a
+    mov [remaining], a
+    cmp a, 0
+    jz search_done
+    mov a, 1
+    mov [cur_idx], a
+    inc i
+
+search_loop:
+    mov a, [i]
+    mov b, [max_val]
+    cmp a, b
+    jz skip_update
+    mov b, a
+    mov a, [max_val]
+    sub a, b
+    jc update_max
+    jmp skip_update
+
+update_max:
+    mov a, [i]
+    mov b, a
+    mov [max_val], b
+    mov a, [cur_idx]
+    mov [max_idx], a
+
+skip_update:
+    inc i
+    mov a, [cur_idx]
+    inc a
+    mov [cur_idx], a
+    mov a, [remaining]
+    dec a
+    mov [remaining], a
+    cmp a, 0
+    jz search_done
+    jmp search_loop
+
+search_done:
+    mov a, [max_val]
+    mov [0xFE], a
+    mov a, [max_idx]
+    mov [0xFF], a
+    hlt
+
+.data
+org 0x80
+arr_start:  db 0x90
+arr_len:    db 8
+remaining:  db 0
+cur_idx:    db 0
+max_val:    db 0
+max_idx:    db 0
+
+org 0x90
+array:
+    db 42
+    db 17
+    db 99
+    db 3
+    db 200
+    db 55
+    db 128
+    db 77

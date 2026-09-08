@@ -1,0 +1,52 @@
+.text
+    mov a, [fill_val]
+    mov b, a
+    mov a, [start_addr]
+    mov i, a
+    mov a, [length]
+    cmp a, 0
+    jz memset_done
+    mov [counter], a
+    mov a, b
+
+memset_loop:
+    mov [i], a
+    inc i
+    mov b, [counter]
+    dec b
+    mov [counter], b
+    cmp b, 0
+    jz memset_done
+    jmp memset_loop
+
+memset_done:
+    dec i
+    mov a, [i]
+    mov [0xFF], a
+    hlt
+
+.data
+org 0x80
+fill_val:   db 0xAA
+start_addr: db 0x90
+length:     db 16
+counter:    db 0
+
+org 0x90
+buffer:
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0

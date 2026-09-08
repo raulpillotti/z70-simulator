@@ -1,0 +1,237 @@
+; ============================================================
+; Z70 - Todas as instruções possíveis
+; Arquivo de referência com todas as combinações de
+; instrução e operando suportadas pela arquitetura Z70.
+;
+; Modos de endereçamento (Tabela 2 - documentação oficial):
+;   0H = A, B        (via registrador)
+;   1H = B, A        (via registrador)
+;   2H = A, I        (via registrador)
+;   3H = I, A        (via registrador)
+;   4H = A, [I]      (indireto)
+;   5H = [I], A      (indireto)
+;   6H = A, constante (imediato)
+;   7H = B, constante (imediato)
+;   8H = I, constante (imediato)
+;   9H = [I], constante (indireto)
+;   AH = A, [memória] (direto)
+;   BH = B, [memória] (direto)
+;   CH = [memória], A (direto)
+;   DH = [memória], B (direto)
+;
+; Instruções de 1 operando: 0=A, 1=B, 2=I
+; Desvios: COP fixo (A0-A5) + byte de endereço
+; NOP: COP = FF
+; ============================================================
+
+; ============================================================
+; ADD (0x0_) - Adição
+; ============================================================
+add a, b        ; 00       - A = A + B
+add b, a        ; 01       - B = B + A
+add a, i        ; 02       - A = A + I
+add i, a        ; 03       - I = I + A
+add a, [i]      ; 04       - A = A + mem[I]
+add [i], a      ; 05       - mem[I] = mem[I] + A
+add a, 10       ; 06 0A    - A = A + constante
+add b, 10       ; 07 0A    - B = B + constante
+add i, 10       ; 08 0A    - I = I + constante
+add [i], 10     ; 09 0A    - mem[I] = mem[I] + constante
+add a, [200]    ; 0A C8    - A = A + mem[200]
+add b, [200]    ; 0B C8    - B = B + mem[200]
+add [200], a    ; 0C C8    - mem[200] = mem[200] + A
+add [200], b    ; 0D C8    - mem[200] = mem[200] + B
+
+; ============================================================
+; SUB (0x1_) - Subtração
+; ============================================================
+sub a, b        ; 10       - A = A - B
+sub b, a        ; 11       - B = B - A
+sub a, i        ; 12       - A = A - I
+sub i, a        ; 13       - I = I - A
+sub a, [i]      ; 14       - A = A - mem[I]
+sub [i], a      ; 15       - mem[I] = mem[I] - A
+sub a, 5        ; 16 05    - A = A - constante
+sub b, 5        ; 17 05    - B = B - constante
+sub i, 5        ; 18 05    - I = I - constante
+sub [i], 5     ; 19 05    - mem[I] = mem[I] - constante
+sub a, [200]    ; 1A C8    - A = A - mem[200]
+sub b, [200]    ; 1B C8    - B = B - mem[200]
+sub [200], a    ; 1C C8    - mem[200] = mem[200] - A
+sub [200], b    ; 1D C8    - mem[200] = mem[200] - B
+
+; ============================================================
+; CMP (0x2_) - Comparação
+; ============================================================
+cmp a, b        ; 20       - compara A com B
+cmp b, a        ; 21       - compara B com A
+cmp a, i        ; 22       - compara A com I
+cmp i, a        ; 23       - compara I com A
+cmp a, [i]      ; 24       - compara A com mem[I]
+cmp [i], a      ; 25       - compara mem[I] com A
+cmp a, 0        ; 26 00    - compara A com constante
+cmp b, 0        ; 27 00    - compara B com constante
+cmp i, 0        ; 28 00    - compara I com constante
+cmp [i], 0     ; 29 00    - compara mem[I] com constante
+cmp a, [200]    ; 2A C8    - compara A com mem[200]
+cmp b, [200]    ; 2B C8    - compara B com mem[200]
+cmp [200], a    ; 2C C8    - compara mem[200] com A
+cmp [200], b    ; 2D C8    - compara mem[200] com B
+
+; ============================================================
+; INC (0x3_) - Incremento
+; ============================================================
+inc a           ; 30       - A = A + 1
+inc b           ; 31       - B = B + 1
+inc i           ; 32       - I = I + 1
+
+; ============================================================
+; DEC (0x4_) - Decremento
+; ============================================================
+dec a           ; 40       - A = A - 1
+dec b           ; 41       - B = B - 1
+dec i           ; 42       - I = I - 1
+
+; ============================================================
+; AND (0x5_) - E lógico
+; ============================================================
+and a, b        ; 50       - A = A AND B
+and b, a        ; 51       - B = B AND A
+and a, i        ; 52       - A = A AND I
+and i, a        ; 53       - I = I AND A
+and a, [i]      ; 54       - A = A AND mem[I]
+and [i], a      ; 55       - mem[I] = mem[I] AND A
+and a, 0x0F     ; 56 0F    - A = A AND constante
+and b, 0x0F     ; 57 0F    - B = B AND constante
+and i, 0x0F     ; 58 0F    - I = I AND constante
+and [i], 0x0F   ; 59 0F    - mem[I] = mem[I] AND constante
+and a, [200]    ; 5A C8    - A = A AND mem[200]
+and b, [200]    ; 5B C8    - B = B AND mem[200]
+and [200], a    ; 5C C8    - mem[200] = mem[200] AND A
+and [200], b    ; 5D C8    - mem[200] = mem[200] AND B
+
+; ============================================================
+; OR (0x6_) - OU lógico
+; ============================================================
+or a, b         ; 60       - A = A OR B
+or b, a         ; 61       - B = B OR A
+or a, i         ; 62       - A = A OR I
+or i, a         ; 63       - I = I OR A
+or a, [i]       ; 64       - A = A OR mem[I]
+or [i], a       ; 65       - mem[I] = mem[I] OR A
+or a, 0x80      ; 66 80    - A = A OR constante
+or b, 0x80      ; 67 80    - B = B OR constante
+or i, 0x80      ; 68 80    - I = I OR constante
+or [i], 0x80    ; 69 80    - mem[I] = mem[I] OR constante
+or a, [200]     ; 6A C8    - A = A OR mem[200]
+or b, [200]     ; 6B C8    - B = B OR mem[200]
+or [200], a     ; 6C C8    - mem[200] = mem[200] OR A
+or [200], b     ; 6D C8    - mem[200] = mem[200] OR B
+
+; ============================================================
+; NOT (0x7_) - NÃO lógico
+; ============================================================
+not a           ; 70       - A = NOT A
+not b           ; 71       - B = NOT B
+not i           ; 72       - I = NOT I
+
+; ============================================================
+; SHR (0x8_) - Deslocamento para direita
+; ============================================================
+shr a           ; 80       - A = A >> 1
+shr b           ; 81       - B = B >> 1
+shr i           ; 82       - I = I >> 1
+
+; ============================================================
+; SHL (0x9_) - Deslocamento para esquerda
+; ============================================================
+shl a           ; 90       - A = A << 1
+shl b           ; 91       - B = B << 1
+shl i           ; 92       - I = I << 1
+
+
+; ============================================================
+; JZ (COP = A1) - Desvio se zero
+; ============================================================
+jz 0x00         ; A1 00    - desvia se flag Z = 1
+jz fim          ; A1 AD    - desvia para rótulo se zero
+
+; ============================================================
+; JS (COP = A2) - Desvio se negativo
+; ============================================================
+js 0x00         ; A2 00    - desvia se flag S = 1
+js fim          ; A2 AD    - desvia para rótulo se negativo
+
+; ============================================================
+; JC (COP = A3) - Desvio se carry
+; ============================================================
+jc 0x00         ; A3 00    - desvia se flag C = 1
+jc fim          ; A3 AD    - desvia para rótulo se carry
+
+; ============================================================
+; JO (COP = A4) - Desvio se overflow
+; ============================================================
+jo 0x00         ; A4 00    - desvia se flag O = 1
+jo fim          ; A4 AD    - desvia para rótulo se overflow
+
+; ============================================================
+; JP (COP = A5) - Desvio se paridade
+; ============================================================
+jp 0x00         ; A5 00    - desvia se flag P = 1
+jp fim          ; A5 AD    - desvia para rótulo se paridade
+
+; ============================================================
+; MOV (0xB_) - Movimentação
+; ============================================================
+mov a, b        ; B0       - A = B
+mov b, a        ; B1       - B = A
+mov a, i        ; B2       - A = I
+mov i, a        ; B3       - I = A
+mov a, [i]      ; B4       - A = mem[I]
+mov [i], a      ; B5       - mem[I] = A
+mov a, 42       ; B6 2A    - A = constante
+mov b, 42       ; B7 2A    - B = constante
+mov i, 42       ; B8 2A    - I = constante
+mov [i], 42     ; B9 2A    - mem[I] = constante
+mov a, [200]    ; BA C8    - A = mem[200]
+mov b, [200]    ; BB C8    - B = mem[200]
+mov [200], a    ; BC C8    - mem[200] = A
+mov [200], b    ; BD C8    - mem[200] = B
+
+; ============================================================
+; NOP (COP = FF) - Nenhuma operação
+; ============================================================
+nop             ; FF       - ciclo ocioso
+
+; ============================================================
+; Rótulos de referência
+; ============================================================
+end1: nop       ; FF       - rótulo de referência (endereço 0xAC)
+fim: nop        ; FF       - rótulo de destino dos desvios (endereço 0xAD)
+
+; ============================================================
+; JMP (COP = A0) - Desvio incondicional
+; ============================================================
+jmp 0x00        ; A0 00    - desvia para endereço 0x00
+jmp fim         ; A0 AD    - desvia para rótulo fim
+
+; ============================================================
+; Total: 174 bytes de código de máquina
+; 120 instruções (14 por grupo x 6 grupos de 2 operandos
+;                + 3 por grupo x 5 grupos de 1 operando
+;                + 2 por tipo x 6 tipos de desvio
+;                + 1 nop + 2 nops dos rótulos)
+;
+; Hex dump esperado:
+; 0000: 00 01 02 03 04 05 06 0A 07 0A 08 0A 09 0A 0A C8
+; 0010: 0B C8 0C C8 0D C8 10 11 12 13 14 15 16 05 17 05
+; 0020: 18 05 19 05 1A C8 1B C8 1C C8 1D C8 20 21 22 23
+; 0030: 24 25 26 00 27 00 28 00 29 00 2A C8 2B C8 2C C8
+; 0040: 2D C8 30 31 32 40 41 42 50 51 52 53 54 55 56 0F
+; 0050: 57 0F 58 0F 59 0F 5A C8 5B C8 5C C8 5D C8 60 61
+; 0060: 62 63 64 65 66 80 67 80 68 80 69 80 6A C8 6B C8
+; 0070: 6C C8 6D C8 70 71 72 80 81 82 90 91 92 A0 00 A0
+; 0080: AD A1 00 A1 AD A2 00 A2 AD A3 00 A3 AD A4 00 A4
+; 0090: AD A5 00 A5 AD B0 B1 B2 B3 B4 B5 B6 2A B7 2A B8
+; 00A0: 2A B9 2A BA C8 BB C8 BC C8 BD C8 FF FF FF
+; ============================================================

@@ -1,0 +1,113 @@
+.text
+    mov a, [copy_len]
+    cmp a, 0
+    jz memcpy_done
+    mov [counter], a
+    mov a, [src_start]
+    mov [src_ptr], a
+    mov a, [dst_start]
+    mov [dst_ptr], a
+    mov a, [dst_start]
+    mov b, [src_start]
+    cmp a, b
+    jz memcpy_done
+    jc forward_copy
+    jmp backward_copy
+
+forward_copy:
+    mov a, [src_ptr]
+    mov i, a
+    mov a, [i]
+    mov b, a
+    mov a, [dst_ptr]
+    mov i, a
+    mov a, b
+    mov [i], a
+    mov a, [src_ptr]
+    inc a
+    mov [src_ptr], a
+    mov a, [dst_ptr]
+    inc a
+    mov [dst_ptr], a
+    mov a, [counter]
+    dec a
+    mov [counter], a
+    cmp a, 0
+    jz memcpy_done
+    jmp forward_copy
+
+backward_copy:
+    mov a, [src_start]
+    mov b, [copy_len]
+    add a, b
+    dec a
+    mov [src_ptr], a
+    mov a, [dst_start]
+    mov b, [copy_len]
+    add a, b
+    dec a
+    mov [dst_ptr], a
+
+backward_loop:
+    mov a, [src_ptr]
+    mov i, a
+    mov a, [i]
+    mov b, a
+    mov a, [dst_ptr]
+    mov i, a
+    mov a, b
+    mov [i], a
+    mov a, [src_ptr]
+    dec a
+    mov [src_ptr], a
+    mov a, [dst_ptr]
+    dec a
+    mov [dst_ptr], a
+    mov a, [counter]
+    dec a
+    mov [counter], a
+    cmp a, 0
+    jz memcpy_done
+    jmp backward_loop
+
+memcpy_done:
+    mov a, [dst_start]
+    mov i, a
+    mov a, [i]
+    mov [0xFF], a
+    hlt
+
+.data
+org 0x80
+src_start: db 0x90
+dst_start: db 0xA0
+copy_len:  db 10
+counter:   db 0
+src_ptr:   db 0
+dst_ptr:   db 0
+
+org 0x90
+src_data:
+    db 0x01
+    db 0x02
+    db 0x03
+    db 0x04
+    db 0x05
+    db 0x06
+    db 0x07
+    db 0x08
+    db 0x09
+    db 0x0A
+    org 0xA0
+
+dst_data:
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0

@@ -1,0 +1,35 @@
+.text
+    mov a, [mcd]
+    mov [multiplicand], a
+    mov a, [mcr]
+    mov [multiplier], a
+    mov a, 0
+    mov [result], a
+    mov a, [multiplier]
+    cmp a, 0
+    jz mult_done
+
+mult_loop:
+    mov a, [result]
+    mov b, [multiplicand]
+    add a, b
+    mov [result], a
+    mov a, [multiplier]
+    dec a
+    mov [multiplier], a
+    cmp a, 0
+    jz mult_done
+    jmp mult_loop
+
+mult_done:
+    mov a, [result]
+    mov [0xFF], a
+    hlt
+
+.data
+org 0x80
+mcd:          db 13
+mcr:          db 7
+multiplicand: db 0
+multiplier:   db 0
+result:       db 0

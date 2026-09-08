@@ -1,0 +1,37 @@
+.text
+    mov a, [input]
+    mov [value], a
+    mov a, 0
+    mov [popcount], a
+    mov a, [value]
+    cmp a, 0
+    jz popcount_done
+
+popcount_loop:
+    mov a, [value]
+    and a, 1
+    cmp a, 0
+    jz skip_inc
+    mov a, [popcount]
+    inc a
+    mov [popcount], a
+
+skip_inc:
+    mov a, [value]
+    shr a
+    mov [value], a
+    cmp a, 0
+    jz popcount_done
+    jmp popcount_loop
+
+popcount_done:
+    mov a, [popcount]
+    mov [0xFF], a
+    hlt
+
+.data
+org 0x80
+input:    db 0xAB
+value:    db 0
+popcount: db 0
+parity:   db 0

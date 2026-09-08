@@ -1,0 +1,76 @@
+.text
+    mov a, [input]
+    mov [value], a
+    mov a, 0
+    mov [reversed], a
+    mov a, 8
+    mov [bit_count], a
+
+reverse_loop:
+    mov a, [bit_count]
+    cmp a, 0
+    jz reverse_done
+    mov a, [reversed]
+    shl a
+    mov [reversed], a
+    mov a, [value]
+    and a, 1
+    cmp a, 0
+    jz shift_value
+    mov a, [reversed]
+    or a, 1
+    mov [reversed], a
+
+shift_value:
+    mov a, [value]
+    shr a
+    mov [value], a
+    mov a, [bit_count]
+    dec a
+    mov [bit_count], a
+    jmp reverse_loop
+
+reverse_done:
+    mov a, [reversed]
+    mov [0xFF], a
+    mov [value], a
+    mov a, 0
+    mov [reversed], a
+    mov a, 8
+    mov [bit_count], a
+
+reverse_again:
+    mov a, [bit_count]
+    cmp a, 0
+    jz double_reverse_done
+    mov a, [reversed]
+    shl a
+    mov [reversed], a
+    mov a, [value]
+    and a, 1
+    cmp a, 0
+    jz shift_value2
+    mov a, [reversed]
+    or a, 1
+    mov [reversed], a
+
+shift_value2:
+    mov a, [value]
+    shr a
+    mov [value], a
+    mov a, [bit_count]
+    dec a
+    mov [bit_count], a
+    jmp reverse_again
+
+double_reverse_done:
+    mov a, [reversed]
+    mov [0xFE], a
+    hlt
+
+.data
+org 0x80
+input:     db 0x4A
+value:     db 0
+reversed:  db 0
+bit_count: db 0

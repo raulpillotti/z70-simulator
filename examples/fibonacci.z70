@@ -1,0 +1,63 @@
+.text
+    mov a, [nterms]
+    mov [count], a
+    mov a, [buf_addr]
+    mov i, a
+    mov a, 0
+    mov [i], a
+    inc i
+    mov a, 1
+    mov [i], a
+    inc i
+    mov a, [count]
+    sub a, 2
+    mov [count], a
+    cmp a, 0
+    jz fib_done
+    mov a, 0
+    mov [prev2], a
+    mov a, 1
+    mov [prev1], a
+
+fib_loop:
+    mov a, [prev2]
+    mov b, [prev1]
+    add a, b
+    mov [i], a
+    inc i
+    mov b, [prev1]
+    mov [prev2], b
+    mov [prev1], a
+    mov a, [count]
+    dec a
+    mov [count], a
+    cmp a, 0
+    jz fib_done
+    jmp fib_loop
+
+fib_done:
+    mov a, 0xFF
+    mov [i], a
+    hlt
+
+.data
+org 0x80
+nterms:   db 10
+buf_addr: db 0x90
+count:    db 0
+prev2:    db 0
+prev1:    db 0
+
+org 0x90
+fib_buf:
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0

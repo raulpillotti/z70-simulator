@@ -1,0 +1,67 @@
+.text
+    mov a, [input]
+    mov [value], a
+    cmp a, 0
+    jz zero_case
+    mov a, 1
+    mov [result_low], a
+    mov [result_high], a
+
+pow2_loop:
+    mov a, [result_low]
+    cmp a, 128
+    jc try_double
+    jmp pow2_done
+
+try_double:
+    shl a
+    mov b, [value]
+    cmp a, b
+    jz exact_match
+    mov b, a
+    mov a, [value]
+    sub a, b
+    jc pow2_done
+    mov a, [result_low]
+    shl a
+    mov [result_low], a
+    jmp pow2_loop
+
+exact_match:
+    mov a, [result_low]
+    shl a
+    mov [result_low], a
+    jmp pow2_done
+
+zero_case:
+    mov a, 0
+    mov [result_low], a
+    mov [result_high], a
+
+pow2_done:
+    mov a, [result_low]
+    mov [0xFE], a
+    cmp a, 0
+    jz pow2_end
+    mov a, 1
+    mov b, 0
+
+log2_loop:
+    cmp a, [result_low]
+    jz log2_done
+    shl a
+    inc b
+    jmp log2_loop
+
+log2_done:
+    mov [0xFF], b
+
+pow2_end:
+    hlt
+
+.data
+org 0x80
+input:       db 100
+value:       db 0
+result_low:  db 0
+result_high: db 0
