@@ -251,3 +251,91 @@ interface gráfica do simulador.
 O diretório também inclui o arquivo `INVERTED_OPS_ROM.z70m`, uma memória de
 controle personalizada que pode ser carregada no simulador para ilustrar a
 modificação das sequências de microinstruções.
+
+## Requisitos
+
+Para compilar e executar o simulador, são necessários:
+
+- [Rust](https://www.rust-lang.org/) (edition 2021)
+- [Node.js](https://nodejs.org/) e npm
+- As dependências de sistema exigidas pelo [Tauri 2](https://v2.tauri.app/) para
+o respectivo sistema operacional (por exemplo, `webkit2gtk` no Linux)
+
+## Instalação e Execução
+
+Para compilar e executar o simulador em modo de desenvolvimento:
+
+```sh
+npm install
+npm run tauri dev
+```
+
+O comando `tauri dev` compila o núcleo em Rust e inicia a interface gráfica
+com recarregamento automático durante o desenvolvimento. Para gerar o
+executável de produção:
+
+```sh
+npm run tauri build
+```
+
+## Como Usar o Simulador
+
+1. Na tela inicial, carregue um programa em linguagem *assembly* (arquivo com
+extensão `.z70`). Exemplos prontos estão disponíveis no diretório `examples/`.
+2. Opcionalmente, carregue uma memória de controle personalizada (arquivo com
+extensão `.z70m`), como o `examples/INVERTED_OPS_ROM.z70m`.
+3. Na interface principal, utilize os controles de execução para:
+   - **Executar passo a passo**: avança uma microinstrução por vez;
+   - **Executar completo**: executa o programa até o término (instrução `hlt`);
+   - **Reset**: reinicia a execução do programa carregado.
+
+## Estrutura do Projeto
+
+| Diretório/Arquivo | Descrição |
+|-------------------|-----------|
+| `src/` | Interface gráfica (React, TypeScript e D3.js) |
+| `src-tauri/src/` | Núcleo do simulador em Rust (`assembler.rs`, `cpu.rs`, `control_unit.rs`, `memory.rs`, `registers.rs`, `disassembler.rs`, entre outros) |
+| `src-tauri/src/CONTROL_ROM.z70m` | Memória de controle padrão, embutida no binário |
+| `examples/` | Programas `.z70` e memória de controle `.z70m` de exemplo |
+| `docs/` | Figuras utilizadas nesta documentação |
+| `public/` | Recursos estáticos da interface |
+
+## Formatos de Arquivo
+
+### Programas em Assembly (`.z70`)
+
+Os programas utilizam a sintaxe do *assembler* da arquitetura Z70, ilustrada
+a seguir:
+
+```asm
+.text
+    mov a, 5
+    add a, b
+    hlt
+
+.data
+org 0x80
+valor: db 10
+```
+
+- Rótulos terminam com `:` e são resolvidos pelo *assembler*;
+- As diretivas `.text` e `.data` identificam, respectivamente, as seções de
+código e dados;
+- A diretiva `db` inicializa valores em nível de byte;
+- A diretiva `org` define o endereço de memória do que vem a seguir;
+- Comentários iniciam com `;`.
+
+### Memória de Controle (`.z70m`)
+
+O arquivo de memória de controle associa identificadores a sequências de
+microinstruções em hexadecimal:
+
+```
+FETCH -> 0xD480, 0x0060, 0x19080
+0x00 -> 0x2080, 0x6480, 0x21C82, 0x1C081
+```
+
+- `FETCH` define o ciclo de busca;
+- Cada *opcode* (`0x00` a `0xFF`) define a sequência de microinstruções da
+instrução correspondente;
+- Comentários iniciam com `;` ou `#`.
