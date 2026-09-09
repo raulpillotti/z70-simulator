@@ -229,3 +229,25 @@ memória e atualização de registradores.
 A cada ciclo de instrução, o registrador PC é atualizado, permitindo a
 continuidade da execução do programa. Esse processo se repete continuamente
 enquanto houver instruções a serem executadas.
+
+## Exemplos
+
+O repositório inclui um conjunto de programas de exemplo, disponíveis no
+diretório `examples/`, que ilustram a utilização do *assembly* da arquitetura
+Z70. Os arquivos com extensão `.z70` podem ser carregados diretamente na
+interface gráfica do simulador.
+
+| Arquivo | Descrição |
+|---------|-----------|
+| `fibonacci.z70` | Calcula e armazena a sequência de Fibonacci |
+| `find_max.z70` | Encontra o maior valor de um vetor de 8 bits |
+| `memcpy.z70` | Copia uma região de memória, com tratamento de sobreposição |
+| `memset.z70` | Preenche uma região de memória com um valor |
+| `multiply.z70` | Multiplicação por somas sucessivas |
+| `popcount.z70` | Conta a quantidade de bits iguais a 1 (*popcount*) |
+| `power_of_two.z70` | Determina a maior potência de dois e seu expoente (log₂) |
+| `reverse_bits.z70` | Inverte a ordem dos bits de um valor |
+
+O diretório também inclui o arquivo `INVERTED_OPS_ROM.z70m`, uma memória de
+controle personalizada que pode ser carregada no simulador para ilustrar a
+modificação das sequências de microinstruções.
