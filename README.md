@@ -14,6 +14,8 @@ microprogramada. Sua estrutura é composta por uma Unidade Lógica e Aritmética
 (ULA), registradores, memória e um barramento unificado, conforme apresentado
 na figura a seguir.
 
+![Arquitetura hipotética Z70](docs/z70-2.png)
+
 A arquitetura contempla registradores de propósito geral (A e B), registradores
 auxiliares (TEMP1, TEMP2 e S), registradores de controle (*Program Counter*
 (PC), *Instruction Register* (IR), *Memory Address Register* (MAR) e *Memory
@@ -49,7 +51,6 @@ e funções.
 | Movimentação | BH | mov | Movimentação |
 | Controle | FFH | nop | Operação nula |
 
-![Arquitetura hipotética Z70](docs/z70-2.png)
 
 ## Projeto do Simulador Z70
 
@@ -129,7 +130,7 @@ sequência.
 #### Carregamento da Memória de Controle
 
 A memória de controle pode ser inicializada por uma configuração padrão,
-embutida estaticamente no binário do simulador, ou por meio de um arquivo
+embutida estaticamente no binário do simulador (`src-tauri/src/CONTROL-ROM.z70m`), ou por meio de um arquivo
 fornecido pelo usuário. A configuração associa cada *opcode* a uma sequência
 ordenada de microinstruções, enquanto uma entrada específica é reservada ao
 ciclo de busca (*fetch*), executado no início de cada instrução.
